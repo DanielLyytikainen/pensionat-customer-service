@@ -1,0 +1,32 @@
+name: CI
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      CUSTOMER_DB_USERNAME: testuser
+      CUSTOMER_DB_PASSWORD: testpassword
+      CUSTOMER_DB_ROOT_PASSWORD: testrootpassword
+      TZ: Europe/Stockholm
+
+    steps:
+
+      - name: Checkout customer-service
+        uses: actions/checkout@v4
+        with:
+          path: pensionat-customer-service
+
+      - name: Prepare Docker Compose
+        run: cp pensionat-customer-service/pensionat-local-environment-template/docker-compose.yaml docker-compose.yaml
+
+      - name: Run customer tests
+        run: docker compose --profile test up --build customer-tests
+
+      - name: Clean up
+        if: always()
+        run: docker compose --profile test down -v
