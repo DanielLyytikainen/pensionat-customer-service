@@ -1,9 +1,9 @@
 name: CI
 on:
   push:
-    branches: [master]
+    branches: [ master ]
   pull_request:
-    branches: [master]
+    branches: [ master ]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -25,7 +25,22 @@ jobs:
         run: cp pensionat-customer-service/pensionat-local-environment-template/docker-compose.yaml docker-compose.yaml
 
       - name: Run customer tests
-        run: docker compose --profile test up --build customer-tests
+        run: docker compose --profile test up --build --abort-on-container-exit --exit-code-from customer-tests customer-tests
+
+      - name: Login Docker Hub
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build Docker image
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/pensionat-customer-service:latest ./pensionat-customer-service
+
+      - name: Push Docker image
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/pensionat-customer-service:latest
 
       - name: Clean up
         if: always()
