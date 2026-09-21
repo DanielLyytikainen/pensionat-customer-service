@@ -53,6 +53,7 @@ Each service owns its own database. The Customer Service never reads from or wri
 - JUnit
 - Docker
 - Docker Compose
+- GitHub Actions
 
 ---
 
