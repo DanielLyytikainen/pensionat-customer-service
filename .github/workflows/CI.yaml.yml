@@ -36,11 +36,11 @@ jobs:
 
       - name: Build Docker image
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/pensionat-customer-service:latest ./pensionat-customer-service
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/pensionat-customer-service:${{github.run_number}} ./pensionat-customer-service
 
       - name: Push Docker image
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/pensionat-customer-service:latest
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/pensionat-customer-service:${{github.run_number}}
 
       - name: Clean up
         if: always()
