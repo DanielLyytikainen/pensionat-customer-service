@@ -54,7 +54,6 @@ Each service owns its own database. The Customer Service never reads from or wri
 - Docker
 - Docker Compose
 - GitHub Actions
-- Test
 
 ---
 
