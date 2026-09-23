@@ -10,8 +10,8 @@ jobs:
 
     env:
       CUSTOMER_DB_USERNAME: testuser
-      CUSTOMER_DB_PASSWORD: testpassword
-      CUSTOMER_DB_ROOT_PASSWORD: testrootpassword
+      CUSTOMER_DB_PASSWORD: ${{secrets.CUSTOMERTEST_DB_PASSWORD}}
+      CUSTOMER_DB_ROOT_PASSWORD: ${{secrets.CUSTOMERTEST_DB_ROOTPASSWORD}}
       TZ: Europe/Stockholm
 
     steps:
